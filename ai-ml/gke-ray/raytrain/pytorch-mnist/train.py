@@ -106,7 +106,7 @@ def train_func_per_worker(config: Dict):
 
     # Trust but verify
     assert torch.cuda.is_available()
-    device = get_device()
+    device = ray.train.torch.get_device()
     assert device == torch.device("cuda:0")
 
     # Model training loop

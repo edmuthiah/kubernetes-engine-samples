@@ -99,10 +99,15 @@ def train_func_per_worker(config: Dict):
     # [2] Prepare and wrap your model with DistributedDataParallel
     # Move the model to the correct GPU/CPU device
     # ============================================================
-    model = ray.train.torch.prepare_model(model)
+    model = ray.train.torch.prepare_model(model) # model.to("cuda") and DistributedDataParallel() is done by prepare_model()
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+
+    # Trust but verify
+    assert torch.cuda.is_available()
+    device = get_device()
+    assert device == torch.device("cuda:0")
 
     # Model training loop
     for epoch in range(epochs):
@@ -138,7 +143,7 @@ def train_func_per_worker(config: Dict):
         ray.train.report(metrics={"loss": test_loss, "accuracy": accuracy})
 
 
-def train_fashion_mnist(num_workers=4, cpus_per_worker=2, use_gpu=False):
+def train_fashion_mnist(num_workers=4, cpus_per_worker=4):
     global_batch_size = 32
 
     train_config = {
@@ -150,8 +155,8 @@ def train_fashion_mnist(num_workers=4, cpus_per_worker=2, use_gpu=False):
     # Configure computation resources
     scaling_config = ScalingConfig(
         num_workers=num_workers,
-        use_gpu=use_gpu,
-        resources_per_worker={"CPU": cpus_per_worker}
+        use_gpu=True,
+        resources_per_worker={"GPU": 1, "CPU": cpus_per_worker}
     )
 
     # Initialize a Ray TorchTrainer
@@ -169,6 +174,4 @@ def train_fashion_mnist(num_workers=4, cpus_per_worker=2, use_gpu=False):
 
 
 if __name__ == "__main__":
-    num_workers = int(os.getenv("NUM_WORKERS", "4"))
-    cpus_per_worker = int(os.getenv("CPUS_PER_WORKER", "2"))
-    train_fashion_mnist(num_workers=num_workers, cpus_per_worker=cpus_per_worker)
+    train_fashion_mnist()

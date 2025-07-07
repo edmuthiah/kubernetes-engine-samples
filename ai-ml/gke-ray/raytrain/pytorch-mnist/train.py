@@ -153,6 +153,7 @@ def train_fashion_mnist(num_workers=8, cpus_per_worker=4):
     }
 
     # Configure computation resources
+    
     scaling_config = ScalingConfig(
         num_workers=num_workers,
         use_gpu=True,
@@ -161,6 +162,7 @@ def train_fashion_mnist(num_workers=8, cpus_per_worker=4):
         # resources_per_worker={"CPU": cpus_per_worker}
     )
 
+    torch_config = TorchConfig(backend="nccl")
     # Initialize a Ray TorchTrainer
     trainer = TorchTrainer(
         train_loop_per_worker=train_func_per_worker,

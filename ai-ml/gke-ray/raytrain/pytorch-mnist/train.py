@@ -27,7 +27,7 @@ from torchvision.transforms import Normalize, ToTensor
 
 import ray.train
 from ray.train import ScalingConfig
-from ray.train.torch import TorchTrainer
+from ray.train.torch import TorchTrainer, TorchConfig
 
 
 def get_dataloaders(batch_size):

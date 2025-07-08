@@ -76,7 +76,7 @@ def train_func_per_worker(config: Dict):
 
 def run_stress_test(num_workers=2, gpus_per_worker=8, cpus_per_worker=32):
     """Configures and launches the Ray TorchTrainer job."""
-    batch_size_per_gpu = 256
+    batch_size_per_gpu = 64
     batch_size_per_worker = batch_size_per_gpu * gpus_per_worker
     
     print("--- Starting ADVANCED Training Stress Test ---")
@@ -89,7 +89,7 @@ def run_stress_test(num_workers=2, gpus_per_worker=8, cpus_per_worker=32):
 
     train_config = {
         "lr": 0.1,
-        "epochs": 5,
+        "epochs": 20,
         "batch_size_per_worker": batch_size_per_worker,
     }
 

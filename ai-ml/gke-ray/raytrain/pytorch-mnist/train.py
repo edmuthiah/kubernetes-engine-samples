@@ -141,7 +141,7 @@ def run_stress_test(num_workers=2, gpus_per_worker=8, cpus_per_worker=32):
     Configures and launches the Ray TorchTrainer job.
     """
     # A large batch size per GPU is key to maximizing utilization
-    batch_size_per_gpu = 256
+    batch_size_per_gpu = 32
     total_gpus = num_workers * gpus_per_worker
     
     # Each Ray worker process manages `gpus_per_worker`, so its total batch size is multiplied.
@@ -159,7 +159,7 @@ def run_stress_test(num_workers=2, gpus_per_worker=8, cpus_per_worker=32):
 
     train_config = {
         "lr": 0.1,  # A higher learning rate is common for large-batch training
-        "epochs": 10,
+        "epochs": 100,
         "batch_size_per_worker": batch_size_per_worker,
     }
 

@@ -79,7 +79,7 @@ def train_func_per_worker(config: Dict):
         batch_size_per_worker=batch_size_per_worker
     )
     train_dataloader = ray.train.torch.prepare_data_loader(train_dataloader)
-    test_dataloader = ray.train.torch.prepare_data_loade(test_dataloader)
+    test_dataloader = ray.train.torch.prepare_data_loader(test_dataloader)
     
     # 2. Get and prepare model for distributed training
     model = models.resnet50(weights=None, num_classes=10)

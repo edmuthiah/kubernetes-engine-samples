@@ -141,8 +141,8 @@ def train_func_per_worker(config: Dict):
         ray.train.report(metrics={"loss": test_loss, "accuracy": accuracy})
 
 
-def train_fashion_mnist(num_workers=8, cpus_per_worker=4):
-    global_batch_size = 32
+def train_fashion_mnist(num_workers=2, cpus_per_worker=4):
+    global_batch_size = 256
 
     train_config = {
         "lr": 1e-3,
@@ -155,7 +155,7 @@ def train_fashion_mnist(num_workers=8, cpus_per_worker=4):
     scaling_config = ScalingConfig(
         num_workers=num_workers,
         use_gpu=True,
-        resources_per_worker={"GPU": 1, "CPU": cpus_per_worker}
+        resources_per_worker={"GPU": 8, "CPU": cpus_per_worker}
         # use_gpu=False,
         # resources_per_worker={"CPU": cpus_per_worker}
     )

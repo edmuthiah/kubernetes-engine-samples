@@ -96,10 +96,9 @@ def train_func_per_worker(config: Dict):
     # [2] Prepare model for distributed training
     model = ray.train.torch.prepare_model(model)
     
-    # [NEW] Use torch.compile for a massive speedup (requires PyTorch 2.0+)
-    # This JIT-compiles the model into optimized kernels.
-    print("Compiling the model... (this may take a minute)")
-    model = torch.compile(model)
+    # # This JIT-compiles the model into optimized kernels.
+    # print("Compiling the model... (this may take a minute)")
+    # model = torch.compile(model)
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)

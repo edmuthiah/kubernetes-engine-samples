@@ -49,11 +49,7 @@ def train_func_per_worker(config: Dict):
     
     model = models.convnext_base(weights=None, num_classes=1000)
     model = ray.train.torch.prepare_model(model)
-
-    print("Compiling the model... (this may take a minute)")
-    model = torch.compile(model, mode="reduce-overhead")
-    print("Model compiled successfully.")
-
+    
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
     scaler = torch.cuda.amp.GradScaler()

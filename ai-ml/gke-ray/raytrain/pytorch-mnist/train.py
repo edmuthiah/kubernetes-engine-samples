@@ -128,11 +128,11 @@ def train_func_per_worker(config: Dict):
 
         # 6. Report metrics and checkpoint using the modern Ray Train API
         # When using DDP, the original model is accessed via `model.module`
-        checkpoint = TorchCheckpoint.from_model(model=model.module)
+        # checkpoint = TorchCheckpoint.from_model(model=model.module)
         
         ray.train.report(
             metrics={"loss": test_loss, "accuracy": accuracy},
-            checkpoint=checkpoint,
+            # checkpoint=checkpoint,
         )
 
 

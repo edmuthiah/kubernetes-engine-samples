@@ -142,7 +142,7 @@ def train_func_per_worker(config: Dict):
 
 
 def train_fashion_mnist(num_workers=2, cpus_per_worker=4):
-    global_batch_size = 256
+    global_batch_size = 16 #intentially low
 
     train_config = {
         "lr": 1e-3,

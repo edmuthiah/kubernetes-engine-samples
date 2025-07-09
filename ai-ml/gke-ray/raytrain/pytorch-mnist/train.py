@@ -102,4 +102,4 @@ def run_stress_test(num_nodes=2, gpus_per_node=8, cpus_per_node=220):
     print(f"Result: {result}")
 
 if __name__ == "__main__":
-    run_stress_test(num_nodes=2, gpus_per_node=8)
+    run_stress_test(num_nodes=1, gpus_per_node=8)

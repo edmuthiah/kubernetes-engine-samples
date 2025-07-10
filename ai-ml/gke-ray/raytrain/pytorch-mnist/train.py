@@ -66,7 +66,7 @@ def train_func_per_worker(config: Dict):
 
 def run_stress_test(num_nodes=2, gpus_per_node=8, cpus_per_node=220):
     """Configures and launches the Ray TorchTrainer job using a one-process-per-GPU model."""
-    total_workers = num_nodes * gpus_per_node / 2
+    total_workers = num_nodes * gpus_per_node // 2
     gpus_per_worker = 1
     cpus_per_worker = cpus_per_node // gpus_per_node
     batch_size_per_gpu = 64

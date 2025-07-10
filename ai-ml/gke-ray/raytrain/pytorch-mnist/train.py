@@ -45,21 +45,15 @@ def train_func_per_worker(config: Dict):
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
-    scaler = torch.cuda.amp.GradScaler()
-
+    
     for epoch in range(epochs):
         model.train()
         for X, y in tqdm(train_dataloader, desc=f"Train Epoch {epoch} Rank {world_rank}"):
-            with torch.cuda.amp.autocast(dtype=torch.bfloat16):
-                pred = model(X)
-                loss = loss_fn(pred, y)
-            
+            pred = model(X)
+            loss = loss_fn(pred, y)
             optimizer.zero_grad()
-            scaler.scale(loss).backward()
-            scaler.step(optimizer)
-            scaler.update()
-        
-        # For simplicity in this benchmark, we only report at the end.
+            loss.backward()
+            optimizer.step()
         
     print(f"[Rank {world_rank}] Training finished.")
 
@@ -68,8 +62,6 @@ def run_stress_test(num_nodes=2, gpus_per_node=8, cpus_per_node=220):
     """Configures and launches the Ray TorchTrainer job using a one-process-per-GPU model."""
     total_workers = num_nodes * gpus_per_node
     gpus_per_worker = 1
-    cpus_per_worker = cpus_per_node // gpus_per_node
-    batch_size_per_gpu = 64
     
     print(f"Total Workers (world_size): {total_workers}")
     print(f"GPUs per Worker:            {gpus_per_worker}")
@@ -78,13 +70,13 @@ def run_stress_test(num_nodes=2, gpus_per_node=8, cpus_per_node=220):
     train_config = {
         "lr": 0.1,
         "epochs": 10,
-        "batch_size_per_worker": batch_size_per_gpu,
+        "batch_size_per_worker": 64,
     }
 
     scaling_config = ScalingConfig(
         num_workers=total_workers,
         use_gpu=True,
-        resources_per_worker={"GPU": gpus_per_worker, "CPU": cpus_per_worker},
+        resources_per_worker={"GPU": gpus_per_worker},
     )
     
     torch_config = TorchConfig(backend="nccl")

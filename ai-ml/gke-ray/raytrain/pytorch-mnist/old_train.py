@@ -9,8 +9,8 @@ from torch.utils.data import DataLoader
 from torchvision import models, transforms, datasets
 
 import ray.train
-from ray.train import ScalingConfig, TorchConfig
-from ray.train.torch import TorchTrainer
+from ray.train import ScalingConfig
+from ray.train.torch import TorchConfig, TorchTrainer
 
 def get_dataloaders(batch_size_per_worker):
     """

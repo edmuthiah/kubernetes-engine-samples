@@ -71,7 +71,6 @@ def run_stress_test(num_nodes=2, gpus_per_node=8, cpus_per_node=220):
     cpus_per_worker = cpus_per_node // gpus_per_node
     batch_size_per_gpu = 64
     
-    print("--- Starting Final Stress Test (16 Workers, 1 GPU/Worker) ---")
     print(f"Total Workers (world_size): {total_workers}")
     print(f"GPUs per Worker:            {gpus_per_worker}")
     print("-------------------------------------------------------------")
@@ -102,4 +101,4 @@ def run_stress_test(num_nodes=2, gpus_per_node=8, cpus_per_node=220):
     print(f"Result: {result}")
 
 if __name__ == "__main__":
-    run_stress_test(num_nodes=1, gpus_per_node=1)
+    run_stress_test(num_nodes=1, gpus_per_node=8)
